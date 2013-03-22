@@ -4,7 +4,7 @@ Leniningen task to help you cut a new release of your git-based project. In deta
 
 1. check for uncommitted changes and refuse continue in case of any;
 2. edit `project.clj`: remove the "-SNAPSHOT" suffix. If the suffix is not there, don't touch the version;
-3. deploy the project using the configured deployment strategy (see below);
+3. deploy the project using the configured deployment route (see below);
 4. in case of a failed deployment, revert to the original project version;
 5. commit the edited `project.clj` and tag it with `<project>-<version>`;
 6. edit `project.clj`: move to the next SNAPSHOT version;
@@ -29,7 +29,7 @@ $ lein release
 
 # Configuration
 
-Configure the task with a map under the `:lein-release` key. There is only one option: `:deploy-via`, specifying the deployment strategy.
+Configure the task with a map under the `:lein-release` key. There is only one option: `:deploy-via`, specifying the deployment route.
 
 ```clojure
 (defproject imagine "1.0.0-SNAPSHOT"

@@ -68,7 +68,7 @@
                       "clojars@clojars.org:")
         :none nil)
       (catch Throwable t
-        (update-project! project current-version)
+        (sh! "git" "checkout" "project.clj")
         (throw t)))
     (when release-version
       (sh! "git" "add" "project.clj")
