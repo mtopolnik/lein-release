@@ -21,7 +21,7 @@
   (let [deploy-via (-> project :lein-release :deploy-via)
         supported #{:clojars :lein-deploy :lein-install :none}]
     (cond
-     deploy-via (or (some supported deploy-via)
+     deploy-via (or (supported deploy-via)
                     (abort ":deploy-via" deploy-via "is not supported. Use one of" deploy-via))
      (:repositories project) :lein-deploy
      :else :none)))
