@@ -1,0 +1,5 @@
+/pom.xml
+/target
+/checkouts
+*~
+.lein-repl-history
