@@ -37,8 +37,8 @@
         (-> (slurp "project.clj")
             (s/replace #"(defproject\s+\S+\s+)\"(.+?)\"" (format "$1\"%s\"" new-version))
             (->> (spit "project.clj")))
-        (let [p (assoc project :version new-version)]
-          (with-meta p (assoc-in (meta p) [:without-profiles :version] new-version))))
+        (-> (assoc project :version new-version)
+            (vary-meta assoc-in [:without-profiles :version] new-version)))
     project))
 
 (defmacro lein-do [project & cmds]
