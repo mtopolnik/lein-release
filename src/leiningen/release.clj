@@ -7,15 +7,11 @@
 
 (defn fail [& args] (throw (Exception. (s/join " " args))))
 
-(defn sh! [& args]
-  (apply println "$" args)
-  (let [p (-> (ProcessBuilder. ^"[Ljava.lang.String;" (into-array args))
-              (.redirectErrorStream true)
-              .start)]
-    (io/copy (.getInputStream p) System/out)
-    (let [res (.waitFor p)]
-      (when-not (zero? res) (fail "Command failed with exit code" res ":" args))
-      res)))
+(defn sh! [& cmd]
+  (apply println "$" cmd)
+  (let [res (eval/sh cmd)]
+    (when-not (zero? res) (abort "Command failed with exit code %s: %s" res cmd))
+    res))
 
 (defn deploy-via [project]
   (let [deploy-via (-> project :lein-release :deploy-via)
