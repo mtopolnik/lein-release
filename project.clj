@@ -3,5 +3,4 @@
   :url "https://github.com/Inge-mark/lein-release"
   :license {:name "Eclipse Public License" :url "http://www.eclipse.org/legal/epl-v10.html"}
   :lein-release {:deploy-via :clojars}
-  :eval-in :leiningen
-  :dependencies [[org.clojure/clojure "1.5.1"]])
+  :eval-in :leiningen)
