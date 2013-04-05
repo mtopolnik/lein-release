@@ -1,5 +1,5 @@
 (ns leiningen.release
-  (require [leiningen.core.main :refer [apply-task abort]]
+  (require (leiningen.core [main :refer [apply-task abort]] [eval :as eval])
            (clojure.java [shell :as sh] [io :as io])
            [clojure.string :as s]))
 
@@ -9,16 +9,16 @@
 
 (defn sh! [& cmd]
   (apply println "$" cmd)
-  (let [res (eval/sh cmd)]
+  (let [res (apply eval/sh cmd)]
     (when-not (zero? res) (abort "Command failed with exit code %s: %s" res cmd))
     res))
 
 (defn deploy-via [project]
   (let [deploy-via (-> project :lein-release :deploy-via)
-        supported #{:clojars :lein-deploy :lein-install :none}]
+        supported #{:lein-deploy :lein-deploy-clojars :lein-install :none}]
     (cond
      deploy-via (or (supported deploy-via)
-                    (abort ":deploy-via" deploy-via "is not supported. Use one of" deploy-via))
+                    (abort ":deploy-via" deploy-via "is not supported. Use one of" supported))
      (:repositories project) :lein-deploy
      :else :none)))
 
