@@ -42,7 +42,9 @@
     project))
 
 (defmacro lein-do [project & cmds]
-  `(do ~@(for [c cmds, cc [`(println "lein" '~c) `(apply-task (name '~c) ~project [])]] cc)))
+  `(do ~@(for [c cmds :let [c (if (coll? c) c [c]), [cmd args] [(first c) (vec (rest c))]]
+               cc [`(println "lein" ~@(map str c))
+                   `(apply-task (name '~cmd) ~project ~args)]] cc)))
 
 (defn release
   "Cut a new release of a git-based project: deploy, tag, bump version, commit."
@@ -57,11 +59,8 @@
       (println "Deploying via" deploy-via)
       (case deploy-via
         :lein-deploy (lein-do project clean deploy)
+        :lein-deploy-clojars (lein-do project clean (deploy "clojars"))
         :lein-install (lein-do project clean install)
-        :clojars (sh! "scp"
-                      (-> project (lein-do clean jar) vals first)
-                      (lein-do project pom)
-                      "clojars@clojars.org:")
         :none nil)
       (catch Throwable t
         (sh! "git" "checkout" "project.clj")
